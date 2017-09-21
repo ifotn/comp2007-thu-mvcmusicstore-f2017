@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MvcMusicStore_Thu_F2017.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -11,7 +12,17 @@ namespace MvcMusicStore_Thu_F2017.Controllers
         // GET: Store
         public ActionResult Index()
         {
-            return View();
+            // create a typed list of Genres
+            var genres = new List<Genre>();
+
+            // create 10 Genres in memory to pass to the main store view
+            for (int i = 1; i <= 10; i++)
+            {
+                genres.Add(new Genre { Name = "Genre " + i.ToString() });
+            }
+
+           // pass the typed list to the view for display
+           return View(genres);
         }
 
         // GET: Store/Browse
