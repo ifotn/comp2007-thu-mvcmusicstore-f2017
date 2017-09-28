@@ -9,17 +9,23 @@ namespace MvcMusicStore_Thu_F2017.Controllers
 {
     public class StoreController : Controller
     {
+        // db connection
+        MusicStoreModel db = new MusicStoreModel();
+
         // GET: Store
         public ActionResult Index()
         {
-            // create a typed list of Genres
-            var genres = new List<Genre>();
+            //// create a typed list of Genres
+            //var genres = new List<Genre>();
 
-            // create 10 Genres in memory to pass to the main store view
-            for (int i = 1; i <= 10; i++)
-            {
-                genres.Add(new Genre { Name = "Genre " + i.ToString() });
-            }
+            //// create 10 Genres in memory to pass to the main store view
+            //for (int i = 1; i <= 10; i++)
+            //{
+            //    genres.Add(new Genre { Name = "Genre " + i.ToString() });
+            //}
+
+            // use Genre model to get the list of genres
+            var genres = db.Genres.ToList();
 
            // pass the typed list to the view for display
            return View(genres);
