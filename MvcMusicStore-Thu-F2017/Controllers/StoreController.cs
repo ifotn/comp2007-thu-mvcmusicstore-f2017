@@ -25,7 +25,9 @@ namespace MvcMusicStore_Thu_F2017.Controllers
             //}
 
             // use Genre model to get the list of genres
-            var genres = db.Genres.ToList();
+            var genres = from g in db.Genres
+                         orderby g.Name
+                         select g;
 
            // pass the typed list to the view for display
            return View(genres);
@@ -34,8 +36,11 @@ namespace MvcMusicStore_Thu_F2017.Controllers
         // GET: Store/Browse
         public ActionResult Browse(string genre)
         {
-            ViewBag.Genre = genre;
-            return View();
+            //ViewBag.Genre = genre;
+            var SelectedGenre = db.Genres.Include("Albums")
+                .SingleOrDefault(g => g.Name == genre);
+
+            return View(SelectedGenre);
         }
     }
 }
