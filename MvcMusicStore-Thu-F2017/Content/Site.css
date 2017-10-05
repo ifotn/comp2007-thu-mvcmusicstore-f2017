@@ -316,6 +316,10 @@ th
 	text-align: left;
 }
 
+table.sortable th {
+    cursor: pointer;
+}
+
 th, td
 {
 	padding-left: 5px;
