@@ -18,8 +18,10 @@ namespace MvcMusicStore_Thu_F2017.Models
 
         public int AlbumId { get; set; }
 
+        [Display(Name = "Genre")]
         public int GenreId { get; set; }
 
+        [Display(Name = "Artist")]
         public int ArtistId { get; set; }
 
         [Required]
@@ -27,9 +29,12 @@ namespace MvcMusicStore_Thu_F2017.Models
         public string Title { get; set; }
 
         [Column(TypeName = "numeric")]
+        [DisplayFormat(DataFormatString = "{0:c}")]
+        [Range(0.01, 100.00, ErrorMessage = "Must be between $0.01 and $100.00")]
         public decimal Price { get; set; }
 
         [StringLength(1024)]
+        [Display(Name = "Album Cover")]
         public string AlbumArtUrl { get; set; }
 
         public virtual Artist Artist { get; set; }

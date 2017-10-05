@@ -55,8 +55,8 @@ namespace MvcMusicStore_Thu_F2017.Controllers
         // GET: StoreManager/Create
         public ActionResult Create()
         {
-            ViewBag.ArtistId = new SelectList(db.Artists, "ArtistId", "Name");
-            ViewBag.GenreId = new SelectList(db.Genres, "GenreId", "Name");
+            ViewBag.ArtistId = new SelectList(db.Artists.OrderBy(a => a.Name), "ArtistId", "Name");
+            ViewBag.GenreId = new SelectList(db.Genres.OrderBy(g => g.Name), "GenreId", "Name");
             return View();
         }
 
@@ -69,6 +69,20 @@ namespace MvcMusicStore_Thu_F2017.Controllers
         {
             if (ModelState.IsValid)
             {
+                // process album cover upload if any
+                if (Request.Files.Count > 0)
+                {
+                    var file = Request.Files[0];
+
+                    if (file.FileName != "" && file.ContentLength > 0)
+                    {
+                        string path = Server.MapPath("/Content/Images/") + file.FileName;
+                        file.SaveAs(path);
+
+                        album.AlbumArtUrl = "/Content/Images/" + file.FileName;
+                    }
+                }
+
                 db.Albums.Add(album);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -91,8 +105,8 @@ namespace MvcMusicStore_Thu_F2017.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.ArtistId = new SelectList(db.Artists, "ArtistId", "Name", album.ArtistId);
-            ViewBag.GenreId = new SelectList(db.Genres, "GenreId", "Name", album.GenreId);
+            ViewBag.ArtistId = new SelectList(db.Artists.OrderBy(a => a.Name), "ArtistId", "Name", album.ArtistId);
+            ViewBag.GenreId = new SelectList(db.Genres.OrderBy(g => g.Name), "GenreId", "Name", album.GenreId);
             return View(album);
         }
 
@@ -105,6 +119,20 @@ namespace MvcMusicStore_Thu_F2017.Controllers
         {
             if (ModelState.IsValid)
             {
+                // process album cover upload if any
+                if (Request.Files.Count > 0)
+                {
+                    var file = Request.Files[0];
+
+                    if (file.FileName != "" && file.ContentLength > 0)
+                    {
+                        string path = Server.MapPath("/Content/Images/") + file.FileName;
+                        file.SaveAs(path);
+
+                        album.AlbumArtUrl = "/Content/Images/" + file.FileName;
+                    }
+                }
+
                 db.Entry(album).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
