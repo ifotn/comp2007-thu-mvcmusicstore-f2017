@@ -291,6 +291,7 @@
     <Content Include="Views\StoreManager\Index.cshtml" />
     <Content Include="Views\ShoppingCart\Index.cshtml" />
     <Content Include="Views\ShoppingCart\AddressAndPayment.cshtml" />
+    <Content Include="Views\ShoppingCart\OrderSummary.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

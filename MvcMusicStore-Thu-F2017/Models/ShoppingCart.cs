@@ -110,5 +110,21 @@ namespace MvcMusicStore_Thu_F2017.Models
             // return the total if there is one, if total is null, return zero
             return total ?? decimal.Zero;
         }
+
+        // EmptyCart
+        public void EmptyCart()
+        {
+            // select items in current cart
+            var cartItems = db.Carts.Where(c => c.CartId == ShoppingCartId);
+
+            // delete each item
+            foreach (Cart item in cartItems)
+            {
+                db.Carts.Remove(item);
+            }
+
+            // commit changes
+            db.SaveChanges();
+        }
     }
 }

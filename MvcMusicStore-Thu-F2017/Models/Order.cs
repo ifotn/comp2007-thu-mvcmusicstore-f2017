@@ -54,6 +54,7 @@ namespace MvcMusicStore_Thu_F2017.Models
         [StringLength(160)]
         public string Email { get; set; }
 
+        [DisplayFormat(DataFormatString = "{0:c}")]
         [Column(TypeName = "numeric")]
         public decimal Total { get; set; }
 
