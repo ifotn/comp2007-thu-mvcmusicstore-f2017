@@ -16,7 +16,8 @@ namespace MvcMusicStore_Thu_F2017.Models
         MusicStoreModel db = new MusicStoreModel();
         
         public IQueryable<Album> Albums {  get { return db.Albums;  } }
-
+        public IQueryable<Artist> Artists { get { return db.Artists; } }
+        public IQueryable<Genre> Genres { get { return db.Genres; } }
         public void Delete(Album album)
         {
             db.Albums.Remove(album);

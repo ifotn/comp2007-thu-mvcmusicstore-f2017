@@ -10,6 +10,8 @@ namespace MvcMusicStore_Thu_F2017.Models
     {
         // used for Unit Testing with Mock Store Manager Album data
         IQueryable<Album> Albums { get;  }
+        IQueryable<Artist> Artists { get; }
+        IQueryable<Genre> Genres { get; }
         Album Save(Album album);
         void Delete(Album album);
     }
