@@ -15,7 +15,7 @@ namespace MvcMusicStore_Thu_F2017.Controllers
     public class StoreManagerController : Controller
     {
        
-        private MusicStoreModel db = new MusicStoreModel();
+        //private MusicStoreModel db = new MusicStoreModel();
 
         // GET: StoreManager
         public ActionResult Index()

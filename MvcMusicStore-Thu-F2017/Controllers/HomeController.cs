@@ -26,5 +26,26 @@ namespace MvcMusicStore_Thu_F2017.Controllers
 
             return View();
         }
+
+        public int sum(int x, int y)
+        {
+            return x + y;
+        }
+
+        public string getWeather(int Temp)
+        {
+            if (Temp < 0)
+            {
+                return "I need a coffee";
+            }
+            else if (Temp < 25)
+            {
+                return "I need a tea";
+            }
+            else
+            {
+                return "I need a beer";
+            }
+        }
     }
 }
