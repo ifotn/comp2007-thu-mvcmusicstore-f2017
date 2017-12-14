@@ -41,19 +41,19 @@ namespace MvcMusicStore_Thu_F2017.Controllers
             return View(albums.OrderBy(a => a.Artist.Name).ThenBy(a => a.Title).ToList());
         }
 
-        //// POST: StoreManager - for Title Search on Index View
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Index(string Title)
-        //{
-        //    var albums = from a in db.Albums
-        //                 where a.Title.Contains(Title)
-        //                 orderby a.Artist.Name, a.Title
-        //                 select a;
+        // POST: StoreManager - for Title Search on Index View
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Index(string Title)
+        {
+            var albums = from a in db.Albums
+                         where a.Title.Contains(Title)
+                         orderby a.Artist.Name, a.Title
+                         select a;
 
-        //    ViewBag.AlbumCount = albums.Count();
-        //    return View(albums);
-        //}
+            ViewBag.AlbumCount = albums.Count();
+            return View(albums);
+        }
 
         [AllowAnonymous]
         // GET: StoreManager/Details/5
@@ -71,121 +71,161 @@ namespace MvcMusicStore_Thu_F2017.Controllers
             return View(album);
         }
 
-        //// GET: StoreManager/Create
-        //public ActionResult Create()
-        //{
-        //    ViewBag.ArtistId = new SelectList(db.Artists.OrderBy(a => a.Name), "ArtistId", "Name");
-        //    ViewBag.GenreId = new SelectList(db.Genres.OrderBy(g => g.Name), "GenreId", "Name");
-        //    return View();
-        //}
+        // GET: StoreManager/Create
+        public ActionResult Create()
+        {
+            ViewBag.ArtistId = new SelectList(db.Artists.OrderBy(a => a.Name), "ArtistId", "Name");
+            ViewBag.GenreId = new SelectList(db.Genres.OrderBy(g => g.Name), "GenreId", "Name");
+            return View("Create");
+        }
 
-        //// POST: StoreManager/Create
-        //// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        //// more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Create([Bind(Include = "AlbumId,GenreId,ArtistId,Title,Price,AlbumArtUrl")] Album album)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        // process album cover upload if any
-        //        if (Request.Files.Count > 0)
-        //        {
-        //            var file = Request.Files[0];
+        // POST: StoreManager/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create([Bind(Include = "AlbumId,GenreId,ArtistId,Title,Price,AlbumArtUrl")] Album album)
+        {
+            if (ModelState.IsValid)
+            {
+                // process album cover upload if any
+                if (Request != null)
+                {
+                    if (Request.Files.Count > 0)
+                    {
+                        var file = Request.Files[0];
 
-        //            if (file.FileName != "" && file.ContentLength > 0)
-        //            {
-        //                string path = Server.MapPath("/Content/Images/") + file.FileName;
-        //                file.SaveAs(path);
+                        if (file.FileName != "" && file.ContentLength > 0)
+                        {
+                            string path = Server.MapPath("/Content/Images/") + file.FileName;
+                            file.SaveAs(path);
 
-        //                album.AlbumArtUrl = "/Content/Images/" + file.FileName;
-        //            }
-        //        }
+                            album.AlbumArtUrl = "/Content/Images/" + file.FileName;
+                        }
+                    }
+                }
+                
+                // scaffold code for inserting
+                //db.Albums.Add(album);
+                //db.SaveChanges();
 
-        //        db.Albums.Add(album);
-        //        db.SaveChanges();
-        //        return RedirectToAction("Index");
-        //    }
+                // new repository code for inserting
+                db.Save(album);
 
-        //    ViewBag.ArtistId = new SelectList(db.Artists, "ArtistId", "Name", album.ArtistId);
-        //    ViewBag.GenreId = new SelectList(db.Genres, "GenreId", "Name", album.GenreId);
-        //    return View(album);
-        //}
+                return RedirectToAction("Index");
+            }
 
-        //// GET: StoreManager/Edit/5
-        //public ActionResult Edit(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    Album album = db.Albums.Find(id);
-        //    if (album == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    ViewBag.ArtistId = new SelectList(db.Artists.OrderBy(a => a.Name), "ArtistId", "Name", album.ArtistId);
-        //    ViewBag.GenreId = new SelectList(db.Genres.OrderBy(g => g.Name), "GenreId", "Name", album.GenreId);
-        //    return View(album);
-        //}
+            ViewBag.ArtistId = new SelectList(db.Artists, "ArtistId", "Name", album.ArtistId);
+            ViewBag.GenreId = new SelectList(db.Genres, "GenreId", "Name", album.GenreId);
+            return View("Create", album);
+        }
 
-        //// POST: StoreManager/Edit/5
-        //// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        //// more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Edit([Bind(Include = "AlbumId,GenreId,ArtistId,Title,Price,AlbumArtUrl")] Album album)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        // process album cover upload if any
-        //        if (Request.Files.Count > 0)
-        //        {
-        //            var file = Request.Files[0];
+        // GET: StoreManager/Edit/5
+        public ViewResult Edit(int? id)
+        {
+            if (id == null)
+            {
+                return View("Error");
+            }
+            // scaffold code - now disabled
+            //Album album = db.Albums.Find(id);
 
-        //            if (file.FileName != "" && file.ContentLength > 0)
-        //            {
-        //                string path = Server.MapPath("/Content/Images/") + file.FileName;
-        //                file.SaveAs(path);
+            // new repository code replacing line above
+            Album album = db.Albums.SingleOrDefault(a => a.AlbumId == id);
 
-        //                album.AlbumArtUrl = "/Content/Images/" + file.FileName;
-        //            }
-        //        }
+            if (album == null)
+            {
+                return View("Error");
+            }
+            ViewBag.ArtistId = new SelectList(db.Artists.OrderBy(a => a.Name), "ArtistId", "Name", album.ArtistId);
+            ViewBag.GenreId = new SelectList(db.Genres.OrderBy(g => g.Name), "GenreId", "Name", album.GenreId);
+            return View(album);
+        }
 
-        //        db.Entry(album).State = EntityState.Modified;
-        //        db.SaveChanges();
-        //        return RedirectToAction("Index");
-        //    }
-        //    ViewBag.ArtistId = new SelectList(db.Artists, "ArtistId", "Name", album.ArtistId);
-        //    ViewBag.GenreId = new SelectList(db.Genres, "GenreId", "Name", album.GenreId);
-        //    return View(album);
-        //}
+        // POST: StoreManager/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit([Bind(Include = "AlbumId,GenreId,ArtistId,Title,Price,AlbumArtUrl")] Album album)
+        {
+            if (ModelState.IsValid)
+            {
+                // process album cover upload if any
+                if (Request != null)
+                {
+                    if (Request.Files.Count > 0)
+                    {
+                        var file = Request.Files[0];
 
-        //// GET: StoreManager/Delete/5
-        //public ActionResult Delete(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    Album album = db.Albums.Find(id);
-        //    if (album == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    return View(album);
-        //}
+                        if (file.FileName != "" && file.ContentLength > 0)
+                        {
+                            string path = Server.MapPath("/Content/Images/") + file.FileName;
+                            file.SaveAs(path);
 
-        //// POST: StoreManager/Delete/5
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult DeleteConfirmed(int id)
-        //{
-        //    Album album = db.Albums.Find(id);
-        //    db.Albums.Remove(album);
-        //    db.SaveChanges();
-        //    return RedirectToAction("Index");
-        //}
+                            album.AlbumArtUrl = "/Content/Images/" + file.FileName;
+                        }
+                    }
+                }
+
+                // scaffold code - old
+                //db.Entry(album).State = EntityState.Modified;
+                //db.SaveChanges();
+
+                // repository code - new
+                db.Save(album);
+
+                return RedirectToAction("Index");
+            }
+            ViewBag.ArtistId = new SelectList(db.Artists, "ArtistId", "Name", album.ArtistId);
+            ViewBag.GenreId = new SelectList(db.Genres, "GenreId", "Name", album.GenreId);
+            return View("Edit", album);
+        }
+
+        // GET: StoreManager/Delete/5
+        public ViewResult Delete(int? id)
+        {
+            if (id == null)
+            {
+                return View("Error");
+            }
+            // scaffold code - now disabled
+            //Album album = db.Albums.Find(id);
+
+            // new repository code replacing line above
+            Album album = db.Albums.SingleOrDefault(a => a.AlbumId == id);
+            if (album == null)
+            {
+                return View("Error");
+            }
+            return View(album);
+        }
+
+        // POST: StoreManager/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirmed(int? id)
+        {
+            // scaffold code - now disabled
+            //Album album = db.Albums.Find(id);
+            //db.Albums.Remove(album);
+            //db.SaveChanges();
+
+            // new repository code replacing line above
+            if (id == null)
+            {
+                return View("Error");
+            }
+            Album album = db.Albums.SingleOrDefault(a => a.AlbumId == id);
+            if (album == null)
+            {
+                return View("Error");
+            }
+
+            db.Delete(album);
+
+            return RedirectToAction("Index");
+        }
 
         //protected override void Dispose(bool disposing)
         //{

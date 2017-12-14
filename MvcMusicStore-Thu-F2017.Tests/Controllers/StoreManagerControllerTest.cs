@@ -85,30 +85,219 @@ namespace MvcMusicStore_Thu_F2017.Tests.Controllers
             Assert.IsNull(actual);
         }
 
-        public StoreManagerControllerTest()
+        [TestMethod]
+        public void DetailsInvalidNoId()
         {
-            //
-            // TODO: Add constructor logic here
-            //
+            // Arrange
+            int? id = null;
+
+            // Act
+            var actual = controller.Details(id);
+
+            // Assert
+            Assert.AreEqual("Error", actual.ViewName);
         }
 
-        private TestContext testContextInstance;
-
-        /// <summary>
-        ///Gets or sets the test context which provides
-        ///information about and functionality for the current test run.
-        ///</summary>
-        public TestContext TestContext
+        // GET: Edit
+        [TestMethod]
+        public void EditAlbumValid()
         {
-            get
-            {
-                return testContextInstance;
-            }
-            set
-            {
-                testContextInstance = value;
-            }
+            // ACT
+            var actual = (Album)controller.Edit(1).Model;
+
+            // ASSERT
+            Assert.AreEqual(albums.ToList()[0], actual);
         }
+
+        [TestMethod]
+        public void EditInvalidNoId()
+        {
+            //arrange
+            int? id = null;
+
+            //act
+            var actual = (ViewResult)controller.Edit(id);
+
+            //assert
+            Assert.AreEqual("Error", actual.ViewName);
+        }
+
+        [TestMethod]
+        public void EditInvalidAlbumId()
+        {
+            // Act
+            ViewResult result = controller.Edit(-314) as ViewResult;
+
+            // Assert
+            Assert.AreEqual("Error", result.ViewName);
+        }
+
+        // GET: Delete
+        [TestMethod]
+        public void DeleteValidAlbum()
+        {
+            // Act            
+            var actual = (Album)controller.Delete(1).Model;
+
+            // Assert            
+            Assert.AreEqual(albums.ToList()[0], actual);
+        }
+
+        // Delete invalid ID test
+        [TestMethod]
+        public void DeleteInvalidAlbumId()
+        {
+            // Arrange
+            int id = 87656765;
+
+            // Act
+            ViewResult actual = (ViewResult)controller.Delete(id);
+
+            // Assert
+            Assert.AreEqual("Error", actual.ViewName);
+        }
+
+        [TestMethod]
+        public void DeleteInvalidNoId()
+        {
+            // arrange           
+            int? id = null;
+
+            // act           
+            ViewResult actual = controller.Delete(id);
+
+            // assert           
+            Assert.AreEqual("Error", actual.ViewName);
+        }
+
+        // GET: Create
+        [TestMethod]
+        public void CreateViewLoads()
+        {
+            // act - cast the return type as ViewResult
+            ViewResult actual = (ViewResult)controller.Create();
+
+            // assert
+            Assert.AreEqual("Create", actual.ViewName);
+            Assert.IsNotNull(actual.ViewBag.ArtistId);
+            Assert.IsNotNull(actual.ViewBag.GenreId);
+        }
+
+        // POST: Create
+        [TestMethod]
+        public void CreateValidAlbum()
+        {
+            // arrange
+            Album album = new Album
+            {
+                AlbumId = 4,
+                Title = "Album 4",
+                Price = 4
+            };
+
+            // act
+            RedirectToRouteResult actual = (RedirectToRouteResult)controller.Create(album);
+
+            // assert
+            Assert.AreEqual("Index", actual.RouteValues["action"]);
+        }
+       
+        [TestMethod]
+        public void CreateInvalidAlbum()
+        {
+            // arrange
+            controller.ModelState.AddModelError("key", "error message");
+
+            Album album = new Album
+            {
+                AlbumId = 4,
+                Title = "Album 4",
+                Price = 4
+            };
+
+            // act - cast the return type as ViewResult
+            ViewResult actual = (ViewResult)controller.Create(album);
+
+            // assert
+            Assert.AreEqual("Create", actual.ViewName);
+            Assert.IsNotNull(actual.ViewBag.ArtistId);
+            Assert.IsNotNull(actual.ViewBag.GenreId);
+        }
+
+        // POST: Edit
+        [TestMethod]
+        public void EditValidAlbum()
+        {
+            // arrange
+            Album album = albums.ToList()[0];
+
+            // act
+            RedirectToRouteResult actual = (RedirectToRouteResult)controller.Edit(album);
+
+            // assert
+            Assert.AreEqual("Index", actual.RouteValues["action"]);
+        }
+
+        [TestMethod]
+        public void EditInvalidAlbum()
+        {
+            // arrange
+            controller.ModelState.AddModelError("key", "error message");
+
+            Album album = new Album
+            {
+                AlbumId = 4,
+                Title = "Album 4",
+                Price = 4
+            };
+
+            // act - cast the return type as ViewResult
+            ViewResult actual = (ViewResult)controller.Edit(album);
+
+            // assert
+            Assert.AreEqual("Edit", actual.ViewName);
+            Assert.IsNotNull(actual.ViewBag.ArtistId);
+            Assert.IsNotNull(actual.ViewBag.GenreId);
+        }
+
+        // POST: DeleteConfirmed
+        [TestMethod]
+        public void DeleteConfirmedValidAlbum()
+        {
+            // Act            
+            RedirectToRouteResult actual = (RedirectToRouteResult)controller.DeleteConfirmed(1);
+
+            // Assert            
+            Assert.AreEqual("Index", actual.RouteValues["action"]);
+        }
+
+        // Delete invalid ID test
+        [TestMethod]
+        public void DeleteConfirmedInvalidAlbumId()
+        {
+            // Arrange
+            int id = 87656765;
+
+            // Act
+            ViewResult actual = (ViewResult)controller.DeleteConfirmed(id);
+
+            // Assert
+            Assert.AreEqual("Error", actual.ViewName);
+        }
+
+        [TestMethod]
+        public void DeleteConfirmedInvalidNoId()
+        {
+            // arrange           
+            int? id = null;
+
+            // act           
+            ViewResult actual = (ViewResult)controller.DeleteConfirmed(id);
+
+            // assert           
+            Assert.AreEqual("Error", actual.ViewName);
+        }
+
 
         #region Additional test attributes
         //
@@ -132,6 +321,6 @@ namespace MvcMusicStore_Thu_F2017.Tests.Controllers
         //
         #endregion
 
-       
+
     }
-}
+    }
